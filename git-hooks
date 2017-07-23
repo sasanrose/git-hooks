@@ -170,7 +170,8 @@ function install_hooks
             return 1
         fi
     cmd='#!/usr/bin/env bash
-git-hooks run "$0" "$@"';
+dirgit-hooks run "$0" "$@"';
+    cmd="${cmd/dir/$2}"
     install_hooks_into "${PWD}" "${cmd}"
     else
         if [ ! -d hooks.old ] ; then
@@ -223,7 +224,11 @@ case $1 in
         run_hook "$@"
         ;;
     --install|--uninstall )
-        install_hooks "$1"
+        bin_dir=""
+        if [ ! -z "$2" ] ; then
+            bin_dir="${2%/}/"
+        fi
+        install_hooks "$1" "$bin_dir"
         ;;
     --install-global|--installglobal )
         install_global
